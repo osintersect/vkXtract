@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/entrypoints/content.ts"],
+  "sourcesContent": ["// vkXtract content script: minimal page context helper (no scraping in v0.1).\nchrome.runtime.onMessage.addListener((msg: any, _sender: any, sendResponse: (response?: any) => void) => {\n  const m = msg || {};\n  (async () => {\n    switch (m.type) {\n      case 'VKX_GET_PAGE': {\n        sendResponse({ ok: true, url: location.href, title: document.title });\n        break;\n      }\n      default:\n        sendResponse({ ok: false, error: 'unknown_message' });\n    }\n  })().catch((err) => {\n    sendResponse({ ok: false, error: String(err?.message || err) });\n  });\n  return true;\n});\n"],
+  "mappings": ";;;AACA,SAAO,QAAQ,UAAU,YAAY,CAAC,KAAU,SAAc,iBAA2C;AACvG,UAAM,IAAI,OAAO,CAAC;AAClB,KAAC,YAAY;AACX,cAAQ,EAAE,MAAM;AAAA,QACd,KAAK,gBAAgB;AACnB,uBAAa,EAAE,IAAI,MAAM,KAAK,SAAS,MAAM,OAAO,SAAS,MAAM,CAAC;AACpE;AAAA,QACF;AAAA,QACA;AACE,uBAAa,EAAE,IAAI,OAAO,OAAO,kBAAkB,CAAC;AAAA,MACxD;AAAA,IACF,GAAG,EAAE,MAAM,CAAC,QAAQ;AAClB,mBAAa,EAAE,IAAI,OAAO,OAAO,OAAO,KAAK,WAAW,GAAG,EAAE,CAAC;AAAA,IAChE,CAAC;AACD,WAAO;AAAA,EACT,CAAC;",
+  "names": []
+}

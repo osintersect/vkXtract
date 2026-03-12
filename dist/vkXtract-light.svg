@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="397.31512mm"
+   height="92.116028mm"
+   viewBox="0 0 397.31512 92.116028"
+   version="1.1"
+   id="svg1"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       xlink:href="#linearGradient59"
+       id="linearGradient60"
+       x1="270.62659"
+       y1="347.50592"
+       x2="303.21338"
+       y2="302.65405"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.97626605,-3.9875302e-8,5.8532877e-8,1.0748056,1779.7293,1691.0551)" />
+    <linearGradient
+       id="linearGradient59">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop59" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.66903913;"
+         offset="0.09882355"
+         id="stop61" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.5"
+         id="stop67" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.67000002;"
+         offset="0.90235299"
+         id="stop68" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop60" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient64"
+       id="linearGradient60-9"
+       x1="270.62659"
+       y1="347.50592"
+       x2="303.21338"
+       y2="302.65405"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.97626605,-3.9875312e-8,5.853287e-8,1.0748056,526.60846,266.18996)" />
+    <linearGradient
+       id="linearGradient64">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop62" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.67000002;"
+         offset="0.10117646"
+         id="stop65" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.49882355"
+         id="stop66" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.66903913;"
+         offset="0.89999998"
+         id="stop63" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop64" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(83.371246,-113.83875)">
+    <g
+       id="g68"
+       transform="matrix(1.2251166,0,0,1.2251166,-161.51298,27.2203)">
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="63.582275"
+         y="132.02496"
+         id="text53">V</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="103.30034"
+         y="132.02496"
+         id="text52">K</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="198.00708"
+         y="132.02496"
+         id="text50">T</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="235.11304"
+         y="132.02496"
+         id="text49">R</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="273.82635"
+         y="132.02496"
+         id="text48">A</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="312.2048"
+         y="132.02496"
+         id="text47">C</text>
+      <text
+         style="font-size:66.9781px;font-family:Coolvetica;-inkscape-font-specification:Coolvetica;fill:#ffffff;stroke-width:0.349816"
+         x="351.65497"
+         y="132.02496"
+         id="text46">T</text>
+      <ellipse
+         style="fill:url(#linearGradient60);stroke:none;stroke-width:0.754945;stroke-opacity:1"
+         id="path56"
+         cx="2059.8401"
+         cy="2040.4524"
+         rx="27.062096"
+         ry="38.30608"
+         transform="matrix(0.64893891,-0.76084051,-0.57072013,0.82114465,0,0)" />
+      <ellipse
+         style="fill:url(#linearGradient60-9);stroke:none;stroke-width:0.754945;stroke-opacity:1"
+         id="path56-3"
+         cx="806.7182"
+         cy="615.58783"
+         rx="27.062096"
+         ry="38.30608"
+         transform="matrix(0.64893891,0.76084051,-0.57072013,-0.82114465,0,0)" />
+    </g>
+  </g>
+</svg>
