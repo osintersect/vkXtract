@@ -468,34 +468,6 @@ Use the VK app/OAuth method instead.
 
 That is the better default choice for users who want the more formal route.
 
----
-
-## Part 10 — Suggested wording for vkXtract docs
-
-You can reuse the short version below in your README or user guide:
-
-```md
-## VK access token setup
-
-vkXtract needs a VK user access token for API-backed extraction.
-
-### Recommended method
-Create a VK app, build an OAuth URL, approve access, and copy the token value from the final redirect URL.
-
-### Easier method
-You can also use `https://vkhost.github.io/` as a shortcut helper:
-1. open the site
-2. choose an app
-3. click **Continue as** / **Allow**
-4. copy the value from `access_token=` to `&expires_in`
-5. paste that token into vkXtract
-
-Some users use app profiles such as VFeed or Kate Mobile through helper flows. Treat those as convenience options used at your own risk.
-
-Always treat the token like a password and revoke it if exposed.
-```
-
----
 
 ## Final note
 
