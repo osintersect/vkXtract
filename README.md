@@ -507,8 +507,3 @@ For that reason:
 - avoid over-promising one exact interface path
 - tell users to revoke tokens if exposed
 - present third-party helper methods as optional, not as the only route
-
-
-```bash
-npm ci
-npm run build
