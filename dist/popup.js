@@ -3170,6 +3170,26 @@
       await refresh();
     }
   });
+  reportBtn.addEventListener("click", async () => {
+    reportBtn.disabled = true;
+    try {
+      try {
+        const page = await sendToTab({ type: "VKX_GET_PAGE" });
+        if (page?.ok && page.url) {
+          await sendToBg({ type: "VKX_DETECT_TARGET", pageUrl: page.url });
+        }
+      } catch {
+      }
+      await chrome.tabs.create({ url: chrome.runtime.getURL("report.html") });
+      toast("ok", "Report opened");
+    } catch (e) {
+      toast("bad", String(e?.message || e));
+      setStatus(t("popup.runtime.error"));
+    } finally {
+      reportBtn.disabled = false;
+      await refresh();
+    }
+  });
   openLegalBtn?.addEventListener("click", async () => {
     try {
       await chrome.tabs.create({ url: chrome.runtime.getURL("legal.html") });
