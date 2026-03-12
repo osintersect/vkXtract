@@ -1,0 +1,81 @@
+# Disclaimer
+
+vkXtract is an investigative support and analytical workflow tool.
+
+It is not a source of legal authority, identity proof, evidential certification, or factual certainty.
+
+## 1. Results may be incomplete or wrong
+
+Any output produced by vkXtract may be incomplete, outdated, inaccurate, duplicated, partial, unavailable, or misleading.
+
+Returned data may be affected by:
+
+- VK privacy settings
+- API restrictions
+- deleted or changed content
+- token scope
+- rate limiting
+- third-party service changes
+- browser/runtime constraints
+- target-specific availability differences
+
+You must independently verify all findings.
+
+## 2. No automatic truth or attribution
+
+vkXtract does not prove:
+
+- that a person controls an account
+- that an account is authentic
+- that a relationship is genuine
+- that an interaction reflects intent
+- that a media item is correctly attributed
+- that timeline interpretation is complete
+- that exported material is legally admissible
+
+Analytical interpretation remains the responsibility of the user.
+
+## 3. No legal advice
+
+vkXtract and its accompanying documentation do not provide legal advice, compliance advice, disclosure advice, investigative authorisation advice, or evidential advice.
+
+If legality, admissibility, disclosure obligations, or regulatory compliance matter in your use case, obtain advice from a qualified professional.
+
+## 4. No guarantee of admissibility or courtroom suitability
+
+Use of vkXtract does not make material admissible, authentic, complete, or procedurally sound.
+
+Chain of custody, provenance, preservation quality, disclosure obligations, and evidential value must be assessed independently.
+
+## 5. User responsibility for lawful authority
+
+You are solely responsible for ensuring that your collection, storage, review, export, retention, and sharing of data are lawful and properly authorised.
+
+That includes responsibility for:
+
+- local law
+- sector-specific regulation
+- workplace policy
+- platform rules
+- disclosure obligations
+- privacy and data-protection obligations
+
+## 6. Sensitive and personal data
+
+vkXtract may process, display, or export personal data or other sensitive material depending on the target and the extraction workflow.
+
+You are solely responsible for how that information is:
+
+- stored
+- protected
+- reviewed
+- shared
+- retained
+- deleted
+- disclosed
+
+## 7. Use at your own risk
+
+vkXtract is used at your own risk.
+
+The publisher does not accept responsibility for investigative, analytical, operational, disciplinary, legal, reputational, or commercial consequences arising from use of the tool or reliance on its output.
