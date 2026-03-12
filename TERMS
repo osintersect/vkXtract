@@ -1,0 +1,149 @@
+# Terms of Use
+
+These Terms of Use govern use of vkXtract as distributed by its publisher, whether from source code, a packaged release ZIP, or another authorised release channel.
+
+By downloading, building, loading, running, or using vkXtract, you agree to these Terms.
+
+## 1. Purpose of the tool
+
+vkXtract is an investigative and analytical support tool for structured VK extraction, local case review, and offline package export.
+
+It is provided for lawful research, investigation, analytical review, documentation, and related legitimate uses.
+
+## 2. Lawful use only
+
+You may use vkXtract only where you have lawful authority, a legitimate purpose, and an appropriate basis to access, review, process, or retain the relevant information.
+
+You must not use vkXtract for:
+
+- unlawful surveillance
+- harassment or stalking
+- doxxing
+- intimidation
+- unauthorised access
+- credential misuse
+- platform abuse
+- any use that violates applicable law, court order, regulatory duty, or binding platform restriction
+
+## 3. User responsibility
+
+You are solely responsible for:
+
+- how you use the tool
+- the VK account and token you authorise
+- compliance with applicable law and regulation
+- compliance with VK platform rules, API rules, and account restrictions
+- reviewing and interpreting extraction results
+- securing exported data, reports, and media
+- determining whether use is appropriate in your jurisdiction or organisation
+
+## 4. Tokens, credentials, and accounts
+
+vkXtract may require a VK user access token or other account-linked authorisation material.
+
+You are solely responsible for:
+
+- obtaining that token lawfully
+- protecting it from disclosure
+- revoking or rotating it if it is exposed
+- ensuring that your use of the token is authorised and permitted
+
+The publisher of vkXtract is not responsible for losses arising from exposed, mishandled, reused, or revoked tokens.
+
+## 5. Third-party services and platform dependency
+
+vkXtract depends in part on third-party platforms and services, including VK and, in some workflows, third-party mapping or geocoding services.
+
+Those services may change, restrict access, rate-limit requests, alter returned data, or stop working without notice.
+
+The publisher makes no promise that any specific VK endpoint, metadata field, media resource, or export workflow will remain available.
+
+## 6. No affiliation
+
+vkXtract is an independent tool.
+
+It is not endorsed by, sponsored by, operated by, or affiliated with VK or any other third-party platform unless that relationship is expressly stated in writing.
+
+## 7. No warranty
+
+vkXtract is provided on an "as is" and "as available" basis.
+
+To the maximum extent permitted by law, the publisher disclaims all warranties, whether express, implied, statutory, or otherwise, including warranties of:
+
+- merchantability
+- fitness for a particular purpose
+- non-infringement
+- uninterrupted availability
+- accuracy
+- completeness
+- reliability
+- compatibility
+- suitability for evidential, legal, or operational outcomes
+
+## 8. No guarantee of completeness or correctness
+
+vkXtract may return incomplete, outdated, inaccurate, partial, duplicate, missing, or misleading results.
+
+The tool does not guarantee:
+
+- complete capture of a target
+- complete capture of relationships or interactions
+- accurate attribution
+- availability of historical content
+- preservation of deleted content
+- legal admissibility
+- evidential sufficiency
+
+All findings must be independently verified by the user.
+
+## 9. Limitation of liability
+
+To the maximum extent permitted by law, the publisher shall not be liable for any direct, indirect, incidental, consequential, exemplary, punitive, or special loss or damage arising from or related to use of vkXtract, including loss relating to:
+
+- data loss
+- missed evidence
+- inaccurate findings
+- reputational damage
+- enforcement action
+- account restriction
+- business interruption
+- operational error
+- export handling
+- disclosure of sensitive material
+- credential/token compromise
+
+If liability cannot lawfully be excluded, it is limited to the minimum amount required by law.
+
+## 10. Data handling and retention
+
+vkXtract may store working case data locally and may allow export of reports, raw JSON, and media-related material.
+
+You are solely responsible for:
+
+- retention periods
+- lawful basis for storage
+- access control
+- sharing restrictions
+- evidential handling
+- secure deletion where required
+- any organisational policy obligations that apply to the material
+
+## 11. Changes and withdrawal
+
+The publisher may modify, suspend, replace, or withdraw vkXtract, its releases, or its documentation at any time.
+
+The publisher may also change these Terms in future releases.
+
+Continued use after such change means you accept the updated Terms.
+
+## 12. Open-source code license
+
+The repository code license and these product Terms are separate documents.
+
+The open-source code license governs the software code itself.
+
+These Terms govern product use, distribution context, and user responsibility.
+
+## 13. If you do not agree
+
+If you do not agree to these Terms, do not use vkXtract.
