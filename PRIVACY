@@ -1,0 +1,84 @@
+# Privacy Notice
+
+This notice describes, in plain language, how vkXtract handles data in its normal local-use workflow.
+
+## 1. Local-first design
+
+vkXtract is designed primarily as a local browser extension workflow.
+
+In normal use, the extension stores working data locally in the browser extension environment so that the user can review targets, reopen cases, and export packages.
+
+## 2. Data the extension may store locally
+
+Depending on how you use the tool, vkXtract may store locally:
+
+- the VK access token you paste into the extension
+- active target/case identifiers
+- extracted VK API response data
+- per-target case bundles
+- task state and extraction metadata
+- local caches used by report workflows
+- exported report/package content that you explicitly choose to save
+
+## 3. External services the extension may contact
+
+vkXtract may communicate with external services needed for its workflows, including:
+
+- VK pages and VK API endpoints
+- VK-related media/CDN endpoints where relevant to extraction or packaging
+- OpenStreetMap tile services for map display
+- Nominatim/OpenStreetMap geocoding where that workflow is used
+
+vkXtract is not designed as a general telemetry product and does not require a dedicated vendor backend for ordinary local case use.
+
+## 4. Token handling
+
+The VK access token is user-supplied.
+
+You are responsible for:
+
+- obtaining it lawfully
+- deciding whether to paste it into the extension
+- protecting it from exposure
+- clearing it when no longer needed
+- revoking it at VK if it is compromised
+
+## 5. Case data and exports
+
+Case data may remain stored locally until you delete it.
+
+Exports such as raw JSON, report packages, and media-related files are stored where you choose to save them.
+
+Once exported, those files are under your control and responsibility.
+
+## 6. Deletion and cleanup
+
+Depending on the workflow, vkXtract provides controls to:
+
+- reset the current target
+- delete the current stored target
+- delete all stored targets
+- remove locally stored token data
+
+You can also uninstall the extension.
+
+If you no longer want a VK token to remain usable, revoke it at the VK side as well.
+
+## 7. User responsibility
+
+You are responsible for determining whether your use of vkXtract involves:
+
+- personal data
+- special-category or sensitive material
+- workplace records
+- regulated data
+- disclosure obligations
+- retention/deletion obligations
+
+You are also responsible for applying any encryption, access control, retention, disclosure, or deletion controls required by your environment.
+
+## 8. Changes
+
+This notice may change between releases as the tool evolves.
+
+Users should review the legal and privacy documentation that ships with the specific release they are using.
