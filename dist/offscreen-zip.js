@@ -6442,10 +6442,17 @@
     }
     throw new Error(`zip_export_failed: unsupported source kind for ${entry.path}`);
   }
+  function shouldSkipRemoteZipEntryFailure(entry, path) {
+    if (entry.optional) return true;
+    if (entry.sourceKind !== "remote-url") return false;
+    const cleanPath = String(path || "").replace(/\\/g, "/").toLowerCase();
+    return cleanPath.includes("/media/photos/") || cleanPath.includes("/media/videos/posters/");
+  }
   async function runZipExport(root, exportId, plan) {
     const entries = Array.isArray(plan?.entries) ? plan.entries : [];
     const total = Math.max(entries.length, 1);
     const controller = new AbortController();
+    const skippedOptional = [];
     root.__vkxOffscreenZipAbortController = controller;
     root.__vkxOffscreenZipExportId = exportId;
     root.__vkxOffscreenZipCancelled = false;
@@ -6468,6 +6475,14 @@
           const cancelled = String(err?.message || "") === "zip_export_cancelled" || err?.name === "AbortError" || !!controller.signal.aborted;
           if (cancelled) throw err;
           const remotePart = entry.sourceKind === "remote-url" ? ` :: ${String(entry.remoteUrl || "").trim()}` : "";
+          if (shouldSkipRemoteZipEntryFailure(entry, path)) {
+            skippedOptional.push({
+              path,
+              remoteUrl: String(entry.remoteUrl || "").trim(),
+              error: String(err?.message || err || "blob_build_failed")
+            });
+            continue;
+          }
           throw new Error(`zip_export_failed: ${path}${remotePart} :: ${String(err?.message || err || "blob_build_failed")}`);
         }
         assertZipNotCancelled(root, exportId);
@@ -6485,12 +6500,24 @@
         }
       }
       assertZipNotCancelled(root, exportId);
+      if (skippedOptional.length) {
+        const base = String(plan?.pkgBase || "").replace(/\/+$/g, "");
+        const skippedPath = base ? `${base}/media/manifests/skipped-assets.json` : "media/manifests/skipped-assets.json";
+        const skippedBlob = new Blob([JSON.stringify({ count: skippedOptional.length, items: skippedOptional }, null, 2)], {
+          type: "application/json"
+        });
+        await writer.add(skippedPath, new BlobReader(skippedBlob), {
+          level: 6,
+          signal: controller.signal
+        });
+      }
       await relayZipProgress(exportId, "Finalising ZIP archive…", 98);
       const zipBlob = await writer.close();
       assertZipNotCancelled(root, exportId);
       const filename = `${sanitizeZipFilename(String(plan?.pkgBase || "vkxtract-case-package"))}.zip`;
       const url = URL.createObjectURL(zipBlob);
-      await relayZipDone(exportId, url, filename, `ZIP package saved to Downloads/${filename}.`);
+      const doneText = skippedOptional.length ? `ZIP package saved to Downloads/${filename}. ${skippedOptional.length} media asset${skippedOptional.length === 1 ? "" : "s"} could not be fetched and were skipped (see media/manifests/skipped-assets.json).` : `ZIP package saved to Downloads/${filename}.`;
+      await relayZipDone(exportId, url, filename, doneText);
       window.setTimeout(() => {
         try {
           URL.revokeObjectURL(url);

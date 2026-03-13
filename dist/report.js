@@ -17048,6 +17048,83 @@ ${body}`;
     const ext = "." + String(m[1] || "").toLowerCase();
     return [".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tiff", ".avif"].includes(ext) ? ext : fallback;
   }
+  function isCasePackageRemoteMediaUrlAllowed(url) {
+    const raw = String(url || "").trim();
+    if (!raw) return false;
+    if (!/^https?:\/\//i.test(raw)) return false;
+    const clean = raw.toLowerCase();
+    if (clean.includes("/assets/thumbnails/")) return false;
+    return true;
+  }
+  function photoUrlForPackageJs(photo) {
+    const remoteUrl = String(bestPhotoUrlJs(photo) || "").trim();
+    return isCasePackageRemoteMediaUrlAllowed(remoteUrl) ? remoteUrl : "";
+  }
+  function videoPosterUrlForPackageJs(v) {
+    const explicit = [v?.photo_320, v?.photo_160, v?.photo_130].map((url) => String(url || "").trim()).find((url) => isCasePackageRemoteMediaUrlAllowed(url));
+    if (explicit) return explicit;
+    const imgs = Array.isArray(v?.image) ? v.image : [];
+    if (imgs.length) {
+      const usable = imgs.map((img) => ({
+        width: Number(img?.width),
+        height: Number(img?.height),
+        url: String(img?.url || "").trim()
+      })).filter((img) => isCasePackageRemoteMediaUrlAllowed(img.url));
+      if (usable.length) {
+        const sorted = usable.slice().sort((a, b) => Number(a?.width) * Number(a?.height) - Number(b?.width) * Number(b?.height));
+        const near = sorted.find((img) => Number(img?.width) >= 320) || sorted[sorted.length - 1];
+        if (near?.url) return String(near.url);
+      }
+    }
+    return "";
+  }
+  async function probeCasePackageRemoteMediaUrl(url) {
+    const clean = String(url || "").trim();
+    if (!clean) return { ok: false, error: "missing_remote_url" };
+    const ctrl = new AbortController();
+    const timer = window.setTimeout(() => ctrl.abort(), 12e3);
+    try {
+      const res = await fetch(clean, {
+        method: "GET",
+        cache: "no-store",
+        credentials: "include",
+        signal: ctrl.signal
+      });
+      try {
+        await res.body?.cancel?.();
+      } catch {
+      }
+      if (!res.ok) return { ok: false, error: `fetch ${res.status}` };
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: String(err?.message || err || "fetch_failed") };
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+  async function filterCasePackageRemoteItemsForZip(items, kindLabel, progressBase, progressSpan) {
+    const kept = [];
+    const skipped = [];
+    const total = Math.max(items.length, 1);
+    for (let i = 0; i < items.length; i++) {
+      assertCasePackageExportNotCancelled();
+      const item = items[i];
+      const pct = progressBase + Math.round((i + 1) / total * progressSpan);
+      setCasePackageBusy(true, `Checking packaged ${kindLabel} accessibility… (${i + 1}/${items.length})`, pct);
+      const probe = await probeCasePackageRemoteMediaUrl(String(item.remoteUrl || "").trim());
+      if (probe.ok) {
+        kept.push(item);
+      } else {
+        skipped.push({
+          path: String(item.localPath || "").trim(),
+          remoteUrl: String(item.remoteUrl || "").trim(),
+          error: String(probe.error || "fetch_failed"),
+          stage: "preflight"
+        });
+      }
+    }
+    return { kept, skipped };
+  }
   function casePackageFolder(bundle, stamp) {
     return `${targetExportFolder(bundle)}/case_package_${stamp}`;
   }
@@ -17269,7 +17346,7 @@ ${body}`;
         window.__vkxCasePackageZipLastDone = m;
         window.__vkxCasePackageZipExportId = "";
         window.__vkxCasePackageBusyMode = "";
-        const zipMsg = t("report.common.zipPackageSaved", { filename: String(m.filename || "package.zip") });
+        const zipMsg = String(m.text || "").trim() || t("report.common.zipPackageSaved", { filename: String(m.filename || "package.zip") });
         setCasePackageCompleted(
           zipMsg,
           100,
@@ -17371,7 +17448,7 @@ ${body}`;
       if (!Number.isFinite(owner) || !Number.isFinite(id)) continue;
       const key = `${owner}_${id}`;
       if (seen.has(key)) continue;
-      const remoteUrl = String(bestPhotoUrlJs(p) || "").trim();
+      const remoteUrl = photoUrlForPackageJs(p);
       if (!remoteUrl) continue;
       seen.add(key);
       const ext = inferExtFromMediaUrl(remoteUrl, ".jpg");
@@ -17422,7 +17499,7 @@ ${body}`;
       if (!Number.isFinite(owner) || !Number.isFinite(id)) continue;
       const key = `${owner}_${id}`;
       if (seen.has(`${row.kind}:${key}`)) continue;
-      const remoteUrl = String(videoThumbUrlJs(v) || "").trim();
+      const remoteUrl = videoPosterUrlForPackageJs(v);
       if (!remoteUrl) continue;
       seen.add(`${row.kind}:${key}`);
       const ext = inferExtFromMediaUrl(remoteUrl, ".jpg");
@@ -17493,14 +17570,15 @@ ${body}`;
       progressPct
     };
   }
-  function casePackageEntryRemote(path, remoteUrl, progressText = "", progressPct = 0) {
+  function casePackageEntryRemote(path, remoteUrl, progressText = "", progressPct = 0, opts) {
     return {
       path,
       sourceKind: "remote-url",
       compression: casePackageCompressionForPath(path),
       remoteUrl,
       progressText,
-      progressPct
+      progressPct,
+      optional: !!opts?.optional
     };
   }
   function resetCasePackageFolderCancelState() {
@@ -19118,9 +19196,17 @@ ${body}`;
           const clone = app2.cloneNode(true);
           const snapBundle = bundleCache || bundle;
           const offlinePhotoMap = snapshotPhotoOfflineLookup(snapBundle);
-          const packagePhotos = collectCasePackagePhotos(snapBundle, packageOpts);
+          let packagePhotos = collectCasePackagePhotos(snapBundle, packageOpts);
+          let packageVideos = collectCasePackageVideos(snapBundle, packageOpts);
+          let packageMediaPreflightSkipped = [];
+          if (packageOpts.outputMode === "zip") {
+            const photoProbe = await filterCasePackageRemoteItemsForZip(packagePhotos, "photo evidence", 6, 4);
+            packagePhotos = photoProbe.kept;
+            const videoProbe = await filterCasePackageRemoteItemsForZip(packageVideos, "video poster evidence", 10, 4);
+            packageVideos = videoProbe.kept;
+            packageMediaPreflightSkipped = [...photoProbe.skipped, ...videoProbe.skipped];
+          }
           const packagePhotoMap = packagePhotoLookupFromItems(packagePhotos);
-          const packageVideos = collectCasePackageVideos(snapBundle, packageOpts);
           const packageVideoMap = packageVideoLookupFromItems(packageVideos);
           const geoCache = await loadGeoCache();
           const snapshotGeoPanelSelectors = ["#panel-overview", "#panel-relations", "#panel-friends", "#panel-following", "#panel-followers", "#panel-communities", "#panel-observed"];
@@ -20087,7 +20173,8 @@ ${visCss || ""}
             photo_mode: packageOpts.photoMode,
             photos_count: packagePhotos.length,
             video_mode: packageOpts.videoMode,
-            videos_count: packageVideos.length
+            videos_count: packageVideos.length,
+            media_preflight_skipped_count: packageMediaPreflightSkipped.length
           };
           if (packageOpts.includeRaw) {
             queuePlanEntry(casePackageEntryJson(`${rawBase}/bundle.json`, snapBundle, "Writing raw JSON sidecars…", 32));
@@ -20121,7 +20208,8 @@ ${visCss || ""}
                   `${pkgBase}/${photo.localPath}`,
                   photo.remoteUrl,
                   `Writing packaged photo evidence… (${i + 1}/${packagePhotos.length})`,
-                  pct
+                  pct,
+                  { optional: true }
                 )
               );
             }
@@ -20147,10 +20235,21 @@ ${visCss || ""}
                   `${pkgBase}/${video.localPath}`,
                   video.remoteUrl,
                   `Writing packaged video/clip posters… (${i + 1}/${packageVideos.length})`,
-                  pct
+                  pct,
+                  { optional: true }
                 )
               );
             }
+          }
+          if (packageMediaPreflightSkipped.length) {
+            queuePlanEntry(
+              casePackageEntryJson(
+                `${mediaBase}/manifests/preflight-skipped-assets.json`,
+                { count: packageMediaPreflightSkipped.length, items: packageMediaPreflightSkipped },
+                "Writing skipped-media manifest…",
+                88
+              )
+            );
           }
           queuePlanEntry(casePackageEntryJson(`${pkgBase}/package-summary.json`, pkgSummary, "Writing package summary…", 92));
           const readmeTxt = "vkXtract case package\\n====================\\n\\nOpen report/index.html in a browser.\\n\\nContents\\n- report/index.html : offline report shell\\n- report/assets/ : offline runtime + vendor assets\\n- report/data/runtime-data.js : packaged viewer payload\\n- manifest.json : package manifest\\n- package-summary.json : quick package summary\\n- raw/ : raw JSON sidecars (when enabled)\\n- media/ : packaged evidence assets (when selected)\\n\\nNotes\\n- The offline viewer uses a thin HTML shell plus external runtime/data assets.\\n- offline-runtime.v1.js now reads the packaged viewer payload directly from window.__VKX_OFFLINE_DATA.\\n- Photo evidence is written as packaged local files when selected.\\n- Video/clip packaging currently includes posters + manifests only.\\n- True offline video binaries are not yet bundled because the current bundle does not yet capture direct video file URLs.\\n";

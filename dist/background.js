@@ -584,7 +584,27 @@
     const matchedClients = typeof clientsAny?.matchAll === "function" ? await clientsAny.matchAll() : [];
     return Array.isArray(matchedClients) && matchedClients.some((client2) => String(client2?.url || "") === offscreenUrl);
   }
-  async function ensureZipOffscreenDocument() {
+  async function closeZipOffscreenDocument() {
+    const offscreenApi = chrome.offscreen;
+    if (!offscreenApi?.closeDocument) return;
+    if (!await hasZipOffscreenDocument()) return;
+    try {
+      await offscreenApi.closeDocument();
+    } catch {
+    }
+  }
+  async function ensureZipOffscreenDocument(opts) {
+    if (opts?.forceRecreate) {
+      if (zipOffscreenCreating) {
+        try {
+          await zipOffscreenCreating;
+        } catch {
+        }
+      }
+      await closeZipOffscreenDocument();
+    } else if (await hasZipOffscreenDocument()) {
+      return;
+    }
     if (await hasZipOffscreenDocument()) return;
     if (zipOffscreenCreating) {
       await zipOffscreenCreating;
@@ -607,8 +627,8 @@
       zipOffscreenCreating = null;
     }
   }
-  async function sendToZipOffscreen(message) {
-    await ensureZipOffscreenDocument();
+  async function sendToZipOffscreen(message, opts) {
+    await ensureZipOffscreenDocument(opts);
     return await chrome.runtime.sendMessage({ ...message, target: "offscreen-zip" });
   }
   function relayZipBrokerMessage(message) {
@@ -3398,7 +3418,7 @@
             type: "VKX_OFFSCREEN_ZIP_START",
             exportId,
             plan: m.plan ?? null
-          });
+          }, { forceRecreate: true });
           if (!offscreen?.ok) {
             resetZipBrokerState();
             sendResponse({
@@ -3439,6 +3459,10 @@
             type: "VKX_OFFSCREEN_ZIP_CANCEL",
             exportId
           });
+          if (offscreen?.ok) {
+            void closeZipOffscreenDocument().catch(() => {
+            });
+          }
           sendResponse({
             ok: !!offscreen?.ok,
             exportId,
@@ -3475,6 +3499,8 @@
                 text: String(m.text || `ZIP package saved to Downloads/${filename}.`)
               });
               resetZipBrokerState();
+              void closeZipOffscreenDocument().catch(() => {
+              });
               sendResponse({
                 ok: true,
                 exportId,
@@ -3490,6 +3516,8 @@
                 text: "ZIP export failed."
               });
               resetZipBrokerState();
+              void closeZipOffscreenDocument().catch(() => {
+              });
               sendResponse({
                 ok: false,
                 exportId,
@@ -3510,6 +3538,8 @@
               text: String(m.text || "")
             });
             resetZipBrokerState();
+            void closeZipOffscreenDocument().catch(() => {
+            });
             sendResponse({ ok: true });
             break;
           }
